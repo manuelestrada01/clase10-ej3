@@ -1,26 +1,49 @@
 import NumbersRoutes from "../services/numbers.service.js";
-import WordsService from "../services/numbers.service.js"
+import NumbersService from "../services/numbers.service.js"
 
 class NumbersController{
     constructor(){
         this.service = new NumbersService()
     }
 
-    getWords = async (req, res) =>{
+    getNumbers = async (req, res) =>{
         const numbers = await this.service.getNumbers()
         res.send(numbers)
     }
 
     postNumbers = async (req, res) =>{
+        console.log(req.body);
         const data = req.body
         const newNumber = await this.service.postNumbers(data)
         res.send(newNumber)
     }
 
-    patchNumbers = async (req, res) => {
-        const { id } = req.params
-        const data = req.body
-        const update = await this.service.patchNumbers(id, data)
-        res.send(update)
+    getEntrada = async (req, res) => {
+        const numbers = await this.service.getNumbers();
+        res.send(numbers);
     }
+    
+    getPromedio = async (req, res) => {
+        const numbers = await this.service.getNumbers();
+        const sum = numbers.reduce((a, b) => a + parseInt(b), 0);
+        const avg = sum / numbers.length;
+        res.send({ promedio: avg });
+    }
+    
+    getMinMax = async (req, res) => {
+        const numbers = await this.service.getNumbers();
+        const nums = numbers.map(n => parseInt(n));
+        const min = Math.min(...nums);
+        const max = Math.max(...nums);
+        res.send({ min, max });
+    }
+    
+    getCantidad = async (req, res) => {
+        const numbers = await this.service.getNumbers();
+        res.send({ cantidad: numbers.length });
+    }
+    
+    
 }
+
+export default NumbersController
